@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  
   const [fontsLoaded, error] = useFonts({
     'Poppins-Black': require('../assets/fonts/Poppins-Black.ttf'),
     'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf'),
