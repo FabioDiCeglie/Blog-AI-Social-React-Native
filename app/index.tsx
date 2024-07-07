@@ -1,6 +1,7 @@
 import { Image, ScrollView, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '@/constants';
+import CustomButton from '@/components/CustomButton';
 
 export default function Index() {
   return (
@@ -36,6 +37,12 @@ export default function Index() {
             Where creativity meets innovation: embark on a journey of limitless
             exploration
           </Text>
+
+          <CustomButton 
+            title='Continue with Email'
+            handlePress={() => {}}
+            containerStyles='w-full mt-7'
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
