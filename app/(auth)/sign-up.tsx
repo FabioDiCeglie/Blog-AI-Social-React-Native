@@ -17,9 +17,11 @@ const SignUp = () => {
 
   const handleSubmit = async () => {
     if (form.username === '' || form.email === '' || form.password === '') {
-      Alert.alert('Error', 'Please fill in all the fields');
+      Alert.alert('Error', 'Please fill in all the fields required!');
     }
+
     setIsSubmitting(true);
+
     try {
       const result = await createUser(form.email, form.password, form.username);
 
@@ -30,6 +32,7 @@ const SignUp = () => {
       setIsSubmitting(false);
     }
   };
+
   return (
     <SafeAreaView className='bg-primary h-full'>
       <ScrollView>
