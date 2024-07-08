@@ -1,10 +1,11 @@
 import CustomButton from '@/components/CustomButton';
 import FormField from '@/components/FormField';
 import { images } from '@/constants';
+import { createUser } from '@/lib/appwrite';
+import { Link } from 'expo-router';
 import { useState } from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link } from 'expo-router';
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -14,7 +15,9 @@ const SignUp = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    createUser();
+  };
   return (
     <SafeAreaView className='bg-primary h-full'>
       <ScrollView>
