@@ -1,6 +1,7 @@
 import CustomButton from '@/components/CustomButton';
 import FormField from '@/components/FormField';
 import { images } from '@/constants';
+import { useGlobalContext } from '@/context/GlobalProvider';
 import { createUser } from '@/lib/appwrite';
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
@@ -8,6 +9,7 @@ import { Alert, Image, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SignUp = () => {
+  const { setUser, setIsLoggedIn } = useGlobalContext()
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -24,7 +26,8 @@ const SignUp = () => {
 
     try {
       const result = await createUser(form.email, form.password, form.username);
-
+      setUser(result);
+      setIsLoggedIn(true)
       router.replace('/home');
     } catch (error: unknown | any) {
       Alert.alert('Error', error.message);
