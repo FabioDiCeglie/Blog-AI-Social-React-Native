@@ -3,56 +3,34 @@ import SearchInput from '@/components/SerachInput';
 import Trending from '@/components/Trending';
 import { images } from '@/constants';
 import { getPosts } from '@/lib/appwrite';
-import React, { useEffect, useState } from 'react';
+import useAppWrite from '@/lib/UseAppWrite';
+import React, { useState } from 'react';
 import {
-  Alert,
   FlatList,
   Image,
   RefreshControl,
   Text,
-  View,
+  View
 } from 'react-native';
-import { Models } from 'react-native-appwrite';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Home = () => {
-  const [data, setData] = useState<Models.Document[] | []>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: posts, isLoading, refetch } = useAppWrite(getPosts);
   const [refreshing, setRefreshing] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getPosts();
-        
-        if(!response) throw Error('Error fetching posts!')
-
-        setData(response);
-        setIsLoading(false);
-      } catch (error: any) {
-        setIsLoading(false);
-        Alert.alert('Error', error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // re call videos -> if any new videos appeard
+    await refetch()
     setRefreshing(false);
   };
+  
   return (
     <SafeAreaView className='bg-primary h-full'>
       <FlatList
-        data={data}
+        data={posts}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
-          <Text className='text-xl text-white'>{item.id}</Text>
+          <Text className='text-xl text-white'>{item.title}</Text>
         )}
         ListHeaderComponent={() => (
           <View className='my-6 px-4 space-y-6'>

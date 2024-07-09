@@ -1,0 +1,33 @@
+import { useEffect, useState } from "react";
+import { Models } from "react-native-appwrite";
+import { Alert } from "react-native";
+
+const useAppWrite = (fn : any) => {
+    const [data, setData] = useState<Models.Document[] | []>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const fetchData = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fn();
+            if (!response) throw Error('Error fetching posts!')
+            setData(response);
+            setIsLoading(false);
+        } catch (error: any) {
+            setIsLoading(false);
+            Alert.alert('Error', error.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const refetch = () => fetchData()
+
+    return { data, isLoading, refetch };
+}
+
+export default useAppWrite;
