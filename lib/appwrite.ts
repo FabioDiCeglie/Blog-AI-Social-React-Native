@@ -10,13 +10,15 @@ export const config = {
   storageId: '668c12de0026dfb652ad',
 };
 
+const { endpoint, platform , projectId, databaseId, usersCollectionId, videosCollectionId, storageId } = config;
+
 // Init your React Native SDK
 const client = new Client();
 
 client
-  .setEndpoint(config.endpoint)
-  .setProject(config.projectId)
-  .setPlatform(config.platform);
+  .setEndpoint(endpoint)
+  .setProject(projectId)
+  .setPlatform(platform);
 
 const account = new Account(client);
 const avatars = new Avatars(client);
@@ -38,8 +40,8 @@ export const createUser = async (email: string, password: string, username: stri
     await signIn(email, password);
 
     const newUser = await databases.createDocument(
-      config.databaseId,
-      config.usersCollectionId,
+      databaseId,
+      usersCollectionId,
       ID.unique(),
       {
         accountId: newAccount.$id,
@@ -76,14 +78,28 @@ export const getCurrentUser = async () => {
     if (!currentAccount) throw Error;
 
     const currentUser = await databases.listDocuments(
-      config.databaseId,
-      config.usersCollectionId,
+      databaseId,
+      usersCollectionId,
       [Query.equal("accountId", currentAccount.$id)]
     );
 
     if (!currentUser) throw Error;
 
     return currentUser.documents[0];
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error);
+  }
+}
+
+export const getPosts = async () => {
+  try {
+    const posts = await databases.listDocuments(
+      databaseId,
+      videosCollectionId,
+    )
+
+    return posts.documents;
   } catch (error: any) {
     console.log(error);
     throw new Error(error);

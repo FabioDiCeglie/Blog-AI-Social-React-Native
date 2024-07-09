@@ -1,17 +1,55 @@
-import { View, Text, FlatList, Image } from 'react-native';
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { images } from '@/constants';
+import EmptyState from '@/components/EmptyState';
 import SearchInput from '@/components/SerachInput';
 import Trending from '@/components/Trending';
-import EmptyState from '@/components/EmptyState';
+import { images } from '@/constants';
+import { getPosts } from '@/lib/appwrite';
+import React, { useEffect, useState } from 'react';
+import {
+  Alert,
+  FlatList,
+  Image,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
+import { Models } from 'react-native-appwrite';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Home = () => {
+  const [data, setData] = useState<Models.Document[] | []>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getPosts();
+        
+        if(!response) throw Error('Error fetching posts!')
+
+        setData(response);
+        setIsLoading(false);
+      } catch (error: any) {
+        setIsLoading(false);
+        Alert.alert('Error', error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    // re call videos -> if any new videos appeard
+    setRefreshing(false);
+  };
   return (
     <SafeAreaView className='bg-primary h-full'>
       <FlatList
-        data={[{ id: 1 }]}
+        data={data}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
           <Text className='text-xl text-white'>{item.id}</Text>
@@ -53,6 +91,9 @@ const Home = () => {
             subtitle='Be the first one to upload a video'
           />
         )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </SafeAreaView>
   );
