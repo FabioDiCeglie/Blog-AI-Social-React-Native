@@ -33,7 +33,7 @@ export const createUser = async (email: string, password: string, username: stri
       username
     );
 
-    if (!newAccount) throw new Error();
+    if (!newAccount) throw new Error('No user created!');
 
     const avatarUrl = avatars.getInitials(username);
 
@@ -53,8 +53,8 @@ export const createUser = async (email: string, password: string, username: stri
 
     return newUser;
   } catch (error: any) {
-    console.log(error);
-    throw new Error(error);
+    console.log('Error creating user:', error);
+    throw new Error(error.message || 'Unknown error');
   }
 };
 
@@ -66,8 +66,8 @@ export const signIn = async (email: string, password: string) => {
 
     return session;
   } catch (error: any) {
-    console.log(error);
-    throw new Error(error);
+    console.log('Error sign in:', error);
+    throw new Error(error.message || 'Unknown error');
   }
 };
 
@@ -83,12 +83,12 @@ export const getCurrentUser = async () => {
       [Query.equal("accountId", currentAccount.$id)]
     );
 
-    if (!currentUser) throw Error;
+    if (!currentUser) throw new Error('No user found');
 
     return currentUser.documents[0];
   } catch (error: any) {
-    console.log(error);
-    throw new Error(error);
+    console.log('Error fetching user:', error);
+    throw new Error(error.message || 'Unknown error');
   }
 }
 
@@ -97,11 +97,13 @@ export const getPosts = async () => {
     const posts = await databases.listDocuments(
       databaseId,
       videosCollectionId,
-    )
+    );
+
+    if (!posts) throw new Error('No posts found');
 
     return posts.documents;
   } catch (error: any) {
-    console.log(error);
-    throw new Error(error);
+    console.log('Error fetching posts:', error);
+    throw new Error(error.message || 'Unknown error');
   }
 }
