@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Models } from "react-native-appwrite";
 import { Alert } from "react-native";
 
 const useAppWrite = (fn : any) => {
-    const [data, setData] = useState<Models.Document[] | []>([]);
+    const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchData = async () => {
