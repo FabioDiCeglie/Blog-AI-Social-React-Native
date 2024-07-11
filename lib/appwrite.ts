@@ -107,3 +107,21 @@ export const getPosts = async () => {
     throw new Error(error.message || 'Unknown error');
   }
 }
+
+export const getLatestPosts = async () => {
+  try {
+    const posts = await databases.listDocuments(
+      databaseId,
+      videosCollectionId,
+      [Query.orderDesc('$createdAt', Query.limit(7))]
+    );
+
+    if (!posts) throw new Error('No posts found');
+
+    return posts.documents;
+  } catch (error: any) {
+    console.log('Error fetching latest posts:', error);
+    throw new Error(error.message || 'Unknown error');
+  }
+}
+
