@@ -1,19 +1,19 @@
 import EmptyState from '@/components/EmptyState';
-import SearchInput from '@/components/SearchInput';
+import InfoBox from '@/components/InfoBox';
 import VideoCard from '@/components/VideoCard';
+import { icons } from '@/constants';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { getUserPosts } from '@/lib/appwrite';
 import useAppWrite from '@/lib/UseAppWrite';
-import { useLocalSearchParams } from 'expo-router';
-import React, { useEffect } from 'react';
-import { FlatList, Text, TouchableOpacity, View, Image } from 'react-native';
+import React from 'react';
+import { FlatList, Image, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { icons } from '@/constants';
 
 const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const { data: posts, refetch } = useAppWrite(() => getUserPosts(user.$id));
   const logOut = () => {};
+  
   return (
     <SafeAreaView className='bg-primary h-full'>
       <FlatList
@@ -21,9 +21,9 @@ const Profile = () => {
         keyExtractor={(item) => (item as { $id: string }).$id}
         renderItem={({ item }) => <VideoCard video={item} />}
         ListHeaderComponent={() => (
-          <View className='w-full justify-center items-center mt-6 mb-12 px-4'>
+          <View className='w-full justify-center items-center mb-12 px-4'>
             <TouchableOpacity
-              className='w-full items-end mb-10'
+              className='w-full items-end mb-4'
               onPress={logOut}
             >
               <Image
@@ -38,6 +38,26 @@ const Profile = () => {
                 source={{ uri: user?.avatar }}
                 className='w-[90%] h-[90%] rounded-lg'
                 resizeMode='cover'
+              />
+            </View>
+
+            <InfoBox
+              title={user?.username}
+              containerStyles='mt-5'
+              titleStyles='text-lg'
+            />
+
+            <View className='mt-5 flex-row'>
+              <InfoBox
+                title={posts.length || 0}
+                subtitle='Posts'
+                containerStyles='mr-10'
+                titleStyles='text-xl'
+              />
+              <InfoBox
+                title='1.2k'
+                subtitle='Followers'
+                titleStyles='text-xl'
               />
             </View>
           </View>
