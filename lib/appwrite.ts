@@ -142,3 +142,20 @@ export const searchPosts = async (query: string) => {
   }
 }
 
+export const getUserPosts = async (userId: string) => {
+  try {
+    const posts = await databases.listDocuments(
+      databaseId,
+      videosCollectionId,
+      [Query.equal('creator', userId)]
+    );
+
+    if (!posts) throw new Error(`No posts found on this user id: ${userId}`);
+
+    return posts.documents;
+  } catch (error: any) {
+    console.log(`Error fetching posts on user id: ${userId}`, error);
+    throw new Error(error.message || 'Unknown error');
+  }
+}
+
