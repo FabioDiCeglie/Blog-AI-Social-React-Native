@@ -10,7 +10,7 @@ export const config = {
   storageId: '668c12de0026dfb652ad',
 };
 
-const { endpoint, platform , projectId, databaseId, usersCollectionId, videosCollectionId, storageId } = config;
+const { endpoint, platform, projectId, databaseId, usersCollectionId, videosCollectionId, storageId } = config;
 
 // Init your React Native SDK
 const client = new Client();
@@ -113,7 +113,7 @@ export const getLatestPosts = async () => {
     const posts = await databases.listDocuments(
       databaseId,
       videosCollectionId,
-      [Query.orderDesc('$createdAt', Query.limit(7))]
+      [Query.orderDesc('$createdAt'), Query.limit(7)]
     );
 
     if (!posts) throw new Error('No posts found');
@@ -121,6 +121,23 @@ export const getLatestPosts = async () => {
     return posts.documents;
   } catch (error: any) {
     console.log('Error fetching latest posts:', error);
+    throw new Error(error.message || 'Unknown error');
+  }
+}
+
+export const searchPosts = async (query: string) => {
+  try {
+    const posts = await databases.listDocuments(
+      databaseId,
+      videosCollectionId,
+      [Query.search('title', query)]
+    );
+
+    if (!posts) throw new Error('No posts found');
+
+    return posts.documents;
+  } catch (error: any) {
+    console.log('Error fetching searched posts:', error);
     throw new Error(error.message || 'Unknown error');
   }
 }

@@ -1,5 +1,5 @@
 import EmptyState from '@/components/EmptyState';
-import SearchInput from '@/components/SerachInput';
+import SearchInput from '@/components/SearchInput';
 import Trending from '@/components/Trending';
 import VideoCard from '@/components/VideoCard';
 import { images } from '@/constants';
@@ -47,7 +47,7 @@ const Home = () => {
               </View>
             </View>
 
-            <SearchInput placeholder='Search for a video topic' />
+            <SearchInput />
 
             <View className='w-full flex-1 pt-5 pb-8'>
               <Text className=' text-gray-100 text-lg font-pregular mb-3'>
