@@ -3,21 +3,28 @@ import InfoBox from '@/components/InfoBox';
 import VideoCard from '@/components/VideoCard';
 import { icons } from '@/constants';
 import { useGlobalContext } from '@/context/GlobalProvider';
-import { getUserPosts } from '@/lib/appwrite';
+import { getUserPosts, signOut } from '@/lib/appwrite';
 import useAppWrite from '@/lib/UseAppWrite';
 import React from 'react';
 import { FlatList, Image, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
 const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
-  const { data: posts, refetch } = useAppWrite(() => getUserPosts(user.$id));
-  const logOut = () => {};
-  
+  const { data: userPosts } = useAppWrite(() => getUserPosts(user.$id));
+
+  const logOut = async () => {
+    await signOut();
+    setUser(null);
+    setIsLoggedIn(false);
+    router.replace('/sign-in');
+  };
+
   return (
     <SafeAreaView className='bg-primary h-full'>
       <FlatList
-        data={posts}
+        data={userPosts}
         keyExtractor={(item) => (item as { $id: string }).$id}
         renderItem={({ item }) => <VideoCard video={item} />}
         ListHeaderComponent={() => (
@@ -49,7 +56,7 @@ const Profile = () => {
 
             <View className='mt-5 flex-row'>
               <InfoBox
-                title={posts.length || 0}
+                title={userPosts.length || 0}
                 subtitle='Posts'
                 containerStyles='mr-10'
                 titleStyles='text-xl'

@@ -71,6 +71,19 @@ export const signIn = async (email: string, password: string) => {
   }
 };
 
+export const signOut = async () => {
+  try {
+    const session = await account.deleteSession('current');
+
+    if (!session) throw new Error('The session is not deleted!');
+
+    return session;
+  } catch (error: any) {
+    console.log('Error signing out', error);
+    throw new Error(error.message || 'Unknown error');
+  }
+};
+
 export const getCurrentUser = async () => {
   try {
     const currentAccount = await account.get()
