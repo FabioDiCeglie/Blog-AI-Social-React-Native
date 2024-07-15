@@ -6,6 +6,7 @@ export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isBookmarkTab, setIsBookmarkTab] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,6 +35,8 @@ const GlobalProvider = ({ children }) => {
         user,
         setUser,
         isLoading,
+        isBookmarkTab,
+        setIsBookmarkTab
       }}
     >
       {children}

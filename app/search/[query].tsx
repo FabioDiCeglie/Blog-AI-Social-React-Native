@@ -1,6 +1,7 @@
 import EmptyState from '@/components/EmptyState';
 import SearchInput from '@/components/SearchInput';
 import VideoCard from '@/components/VideoCard';
+import { useGlobalContext } from '@/context/GlobalProvider';
 import { searchPosts } from '@/lib/appwrite';
 import useAppWrite from '@/lib/UseAppWrite';
 import { useLocalSearchParams } from 'expo-router';
@@ -9,12 +10,19 @@ import { FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Search = () => {
+  const { user, isBookmarkTab } = useGlobalContext();
   const { query } = useLocalSearchParams();
   const { data: videos, refetch } = useAppWrite(() => searchPosts(query as string));
 
   useEffect(() => {
     refetch();
   }, [query]);
+
+  if(isBookmarkTab){
+    videos.filter((video: any) => 
+      video.liked.some((item: any) => item.$id === user.$id)
+    );
+  }
 
   return (
     <SafeAreaView className='bg-primary h-full'>
