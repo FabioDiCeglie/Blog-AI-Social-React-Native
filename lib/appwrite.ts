@@ -1,4 +1,6 @@
-import { Client, Account, ID, Avatars, Databases, Query } from 'react-native-appwrite';
+import { Client, Account, ID, Avatars, Databases, Query, Storage, ImageGravity } from 'react-native-appwrite';
+import { FormProps } from '@/app/(tabs)/create';
+import { ImagePickerAsset } from 'expo-image-picker';
 
 export const config = {
   endpoint: 'https://cloud.appwrite.io/v1',
@@ -23,6 +25,7 @@ client
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
+const storage = new Storage(client);
 
 export const createUser = async (email: string, password: string, username: string) => {
   try {
@@ -110,6 +113,7 @@ export const getPosts = async () => {
     const posts = await databases.listDocuments(
       databaseId,
       videosCollectionId,
+      [Query.orderDesc('$createdAt'), Query.limit(7)]
     );
 
     if (!posts) throw new Error('No posts found');
@@ -172,3 +176,67 @@ export const getUserPosts = async (userId: string) => {
   }
 }
 
+const getFilePreview = async (fileId: string, type: string) => {
+  let fileUrl;
+
+  try {
+    if (type === 'video') {
+      fileUrl = storage.getFileView(storageId, fileId)
+    } else if (type === 'image') {
+      fileUrl = storage.getFilePreview(storageId, fileId, 2000, 2000, ImageGravity.Top, 100)
+    } else {
+      throw new Error('Invalid file type!')
+    }
+
+    if (!fileUrl) throw new Error(`Getting file url failed`);
+    return fileUrl
+  } catch (error: unknown) {
+    throw new Error((error as { message: string }).message || 'Unknown error');
+  }
+}
+
+const uploadFile = async (file: ImagePickerAsset | null, type: string) => {
+  if (!file) return;
+
+  const { mimeType, fileName, fileSize, uri } = file;
+  const asset = { type: mimeType as string, name: fileName as string, size: fileSize as number, uri: uri as string };
+  try {
+    const uploadedFile = await storage.createFile(
+      storageId,
+      ID.unique(),
+      asset
+    );
+
+    if (!uploadedFile) throw new Error(`Upload file ${JSON.stringify(file)} to bucket failed`);
+
+    const fileUrl = await getFilePreview(uploadedFile.$id, type);
+
+    return fileUrl;
+  } catch (error: unknown) {
+    throw new Error((error as { message: string }).message || 'Unknown error');
+  }
+}
+
+export const createVideo = async ({ title, thumbnail, video, prompt, userId }: FormProps) => {
+  try {
+    const [thumbnailUrl, videoUrl] = await Promise.all([
+      uploadFile(thumbnail, 'image'),
+      uploadFile(video, 'video'),
+    ])
+
+    const newPost = await databases.createDocument(databaseId, videosCollectionId, ID.unique(), {
+      title,
+      thumbnail: thumbnailUrl,
+      video: videoUrl,
+      prompt,
+      creator: userId
+    })
+
+    if (!newPost) throw new Error(`Error uploading new post: ${title}`)
+
+    return newPost;
+  } catch (error: unknown) {
+    console.log(`Error uploading new video`, error);
+    throw new Error((error as { message: string }).message || 'Unknown error');
+  }
+}
