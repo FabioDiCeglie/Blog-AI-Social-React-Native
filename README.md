@@ -1,51 +1,101 @@
-# Welcome to your Expo app 👋
+# BlogApp README 🎉
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Welcome to **BlogApp**! This isn't just any mobile app—it's your new blogging adventure, built with:
+- React Native
+- Expo
+- Appwrite
+- NativeWind
 
-## Get started
+## Demo 🏄
 
-1. Install dependencies
+<video width="400" height="800" controls>
+  <source src="./assets/DemoBlogApp.mp4" type="video/mp4">
+</video>
 
-   ```bash
+
+## Table of Contents
+- [Features](#features)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+
+## Features 🌟
+- **User Authentication**: Securely log in and sign up with Appwrite's magic. No capes required.
+- **AI-Generated Blog Posts**: Let AI be your muse and create blog posts effortlessly.
+- **Bookmark Blogs**: Keep your favorite posts close, just like your favorite snacks.
+- **Search Videos**: Find exactly what you're looking for with our snazzy search bar, powered by Appwrite indexing.
+- **Responsive Design**: Thanks to NativeWind, our UI is smoother than a jazz saxophone solo.
+
+## Documents Data Structures in Appwrite 📚
+
+### Users
+| **KEY**    | **TYPE** | 
+|------------|----------|
+| username   | String   |
+| email      | Email    |
+| avatar     | Url      |
+| accountId  | String   |
+
+### Videos
+| **KEY**     | **TYPE**          |
+|-------------|-------------------|
+| title       | String            |
+| thumbnail   | Url               |
+| prompt      | String            |
+| video       | Url               |
+| creator     | Rel w users       |
+| liked       | Rel w users       |
+D
+## Installation 🚀
+Ready to join the fun? Follow these steps:
+
+1. **Clone the repository**:
+   ```sh
+   git clone git@github.com:FabioDiCeglie/Blog-AI-Social-React-Native.git
+   cd Blog-AI-Social-React-Native
+   ```
+
+2. **Install dependencies**:
+   ```sh
    npm install
    ```
 
-2. Start the app
-
-   ```bash
-    npx expo start
+3. **Install Expo CLI**:
+   ```sh
+   npm install -g expo-cli
    ```
 
-In the output, you'll find options to open the app in a
+4. **Start the development server**:
+   ```sh
+   npm run startr
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Configuration ⚙️
+1. **Appwrite Setup**: ( https://appwrite.io/ )
+   - Create a shiny new project in Appwrite.
+   - Set up your authentication methods.
+   - Configure your database collections (users and videos).
+   - Create your indexes for the search functionality.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
-# Videos-App-React-Native
+2. **Environment Variables**:
+   - Create a `.env` file in the root directory.
+   - Add your Appwrite secrets:
+     ```env
+     APPWRITE_ENDPOINT=https://[YOUR_APPWRITE_ENDPOINT]
+     APPWRITE_PROJECT_ID=[YOUR_PROJECT_ID]
+     APPWRITE_PLATFORM=""
+     ```
+     Example:
+     ```
+         export const config = {
+         endpoint: process.env.APPWRITE_ENDPOINT ?? 'https://cloud.appwrite.io/v1',
+         platform: process.env.PLATFORM ?? 'com.fabio.aora',
+         projectId: process.env.APPWRITE_PROJECT_ID ?? '668c10800031fa4446cb',
+         databaseId: '668c1175001c45a4c380',
+         usersCollectionId: '668c119400208e92179d',
+         videosCollectionId: '668c11ab001a1b1f4757',
+         storageId: '668c12de0026dfb652ad',
+         };
+   ```
+2. **Notes**:
+   I left my configuration so you can start the project easily but I advice you to create your own project in Appwrite.
