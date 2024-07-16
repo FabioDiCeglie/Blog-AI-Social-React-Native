@@ -21,7 +21,7 @@ const Bookmark = () => {
     setRefreshing(false);
   };
 
-  const likedPosts = posts.filter((post: any) => 
+  const likedPosts = posts && posts.filter((post: any) => 
     post.liked.some((item: any) => item.$id === user.$id)
   );
 

@@ -18,7 +18,7 @@ const Search = () => {
     refetch();
   }, [query]);
 
-  if(isBookmarkTab){
+  if(isBookmarkTab && videos){
     videos.filter((video: any) => 
       video.liked.some((item: any) => item.$id === user.$id)
     );
