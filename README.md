@@ -8,9 +8,7 @@ Welcome to **BlogApp**! This isn't just any mobile app—it's your new blogging 
 
 ## Demo 🏄
 
-<video width="400" height="800" controls>
-  <source src="./assets/DemoBlogApp.mp4" type="video/mp4">
-</video>
+https://github.com/user-attachments/assets/dcd60641-e439-463f-910b-e0639ac9375f
 
 
 ## Table of Contents
@@ -96,6 +94,6 @@ Ready to join the fun? Follow these steps:
          videosCollectionId: '668c11ab001a1b1f4757',
          storageId: '668c12de0026dfb652ad',
          };
-   ```
+     ```
 2. **Notes**:
    I left my configuration so you can start the project easily but I advice you to create your own project in Appwrite.
