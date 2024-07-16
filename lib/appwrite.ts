@@ -3,9 +3,9 @@ import { FormProps } from '@/app/(tabs)/create';
 import { ImagePickerAsset } from 'expo-image-picker';
 
 export const config = {
-  endpoint: 'https://cloud.appwrite.io/v1',
-  platform: 'com.fabio.aora',
-  projectId: '668c10800031fa4446cb',
+  endpoint: process.env.APPWRITE_ENDPOINT ?? 'https://cloud.appwrite.io/v1',
+  platform: process.env.PLATFORM ?? 'com.fabio.aora',
+  projectId: process.env.APPWRITE_PROJECT_ID ?? '668c10800031fa4446cb',
   databaseId: '668c1175001c45a4c380',
   usersCollectionId: '668c119400208e92179d',
   videosCollectionId: '668c11ab001a1b1f4757',
